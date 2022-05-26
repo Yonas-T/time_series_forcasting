@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
         (rmse, mae, r2) = eval_metrics(test_y, predicted_sales)
 
-        print("Elasticnet model (alpha=%f, l1_ratio=%f):" % (alpha, l1_ratio))
+        print("Pharma model (alpha=%f, l1_ratio=%f):" % (alpha, l1_ratio))
         print("  RMSE: %s" % rmse)
         print("  MAE: %s" % mae)
         print("  R2: %s" % r2)
@@ -89,6 +89,6 @@ if __name__ == "__main__":
 
         if tracking_url_type_store != "file":
 
-            mlflow.sklearn.log_model(lr, "model", registered_model_name="ElasticnetWineModel")
+            mlflow.sklearn.log_model(lr, "model", registered_model_name="PharmaModel")
         else:
             mlflow.sklearn.log_model(lr, "model")
