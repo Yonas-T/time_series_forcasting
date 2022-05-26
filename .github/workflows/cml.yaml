@@ -1,0 +1,40 @@
+name: train-my-model
+ 
+on: [push]
+ 
+jobs:
+  run:
+    runs-on: [ubuntu-latest]
+ 
+    steps:
+      - uses: actions/checkout@v2
+ 
+      - uses: iterative/setup-cml@v1
+ 
+      - uses: iterative/setup-dvc@v1
+ 
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+ 
+      - name: cml
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.KEY }}
+        run: |
+          dvc pull data
+ 
+          pip install -r requirements.txt
+          dvc repro
+ 
+          # Compare metrics to master
+          git fetch --prune 
+          dvc metrics diff --show-md master >> report.md
+ 
+          # Visualize loss function diff
+          dvc plots diff \
+            --target test.csv --show-vega master > vega.json
+          vl2png vega.json -s 1.5 > plot.png
+          cml publish --md plot.png >> report.md
+          cml send-comment report.md 
