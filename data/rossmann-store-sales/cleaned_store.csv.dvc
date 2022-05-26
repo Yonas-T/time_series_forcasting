@@ -1,0 +1,4 @@
+outs:
+- md5: 315c8a480c72ac130476ddc8ad195f23
+  size: 66037
+  path: cleaned_store.csv
