@@ -14,11 +14,10 @@ class LstmPrediction:
         self.WINDOW_SIZE = WINDOW_SIZE
         self.BATCH_SIZE = BATCH_SIZE
         
-        # data_agg = sales_data.groupby("Date").agg({"Sales": "mean"})
         data_agg = sales_data
         self.SIZE = len(data_agg["Sales"])
 
-        self.scaled_df, self.scaler_obj = self.add_scaled_sales(data_agg)
+        self.scaled_df, self.scaler_obj = self.add_scaled_sales_df(data_agg)
         
         self.DateTrain = np.reshape(self.scaled_df.index.values[0:BATCH_SIZE], (-1, 1))
         self.DateValid = np.reshape(self.scaled_df.index.values[BATCH_SIZE:], (-1, 1))
@@ -27,19 +26,13 @@ class LstmPrediction:
                                                                                                      BATCH_SIZE, 
                                                                                                      self.scaled_df)
     
-    # def scaler(df, columns):
-    #     minmax_scaler = MinMaxScaler()
-    #     return pd.DataFrame(minmax_scaler.fit_transform(df), columns=[columns]), minmax_scaler
-        
-    def add_scaled_sales(self, df):
-        minmax_scaler = MinMaxScaler()
+
+    def add_scaled_sales_df(self, df):
         def scaler(df, columns):
             minmax_scaler = MinMaxScaler()
             return pd.DataFrame(minmax_scaler.fit_transform(df), columns=[columns]), minmax_scaler
         
-        # scaler_obj = minmax_scaler
         scaled_sales, scaler_obj = scaler(df[["Sales"]], "scaled_sales")
-        # scaled_sales = pd.DataFrame(minmax_scaler.fit_transform(df[["Sales1(t-1)"]]), columns=['scaled_sales'])
         df["scaled_sales"] = scaled_sales["scaled_sales"].to_list()
         return df, scaler_obj
 
@@ -111,7 +104,7 @@ class LstmPrediction:
         plt.plot(DateValid.astype('datetime64'), np.reshape(XValid1, (2*WINDOW_SIZE, 1)), label='Validation series')
         
         plt.xlabel('Date')
-        plt.ylabel('Thousands of Units')
+        plt.ylabel('Units')
         plt.xticks(DateValid.astype('datetime64')[:,-1], rotation = 90) 
         plt.legend(loc="upper right")
 
@@ -120,7 +113,6 @@ class LstmPrediction:
 
         textstr = "MAE = " + "{:.3f}".format(MAE) + "  RMSE = " + "{:.3f}".format(RMSE)
 
-        # place a text box in upper left in axes coords
         plt.annotate(textstr, xy=(0.87, 0.05), xycoords='axes fraction')
         plt.grid(True)
 
