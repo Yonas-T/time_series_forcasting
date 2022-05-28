@@ -3,9 +3,8 @@ import logging
 
 class TrainDataCleaning:
 
-    logging.basicConfig(level=logging.INFO)
-
     def __init__(self, df: pd.DataFrame):
+        logging.basicConfig(level=logging.INFO)
         self.df = df
 
     def convert_to_number(self, df):
@@ -19,12 +18,20 @@ class TrainDataCleaning:
             return df
         except :
             logging.exception('')
+    
+    def drop_closed_stores(self, df):
+
+        try:
+            cleaned = df.query("Open == 1")
+            return cleaned
+        except:
+            logging.exception('')
 
     def convert_to_category(self, df):
-
         df["Open"] = df["Open"].astype("category")
+        df["DayOfWeek"] = df["DayOfWeek"].astype("category")
         df["Promo"] = df["Promo"].astype("category")
-        df["StateHoliday"] = df["StateHoliday"].astype("category")
+        df["StateHoliday"] = df["StateHoliday"].astype("category") 
         df["SchoolHoliday"] = df["SchoolHoliday"].astype("category")
         df['StateHoliday'] = df['StateHoliday'].astype(
             "str").astype("category")
@@ -34,4 +41,6 @@ class TrainDataCleaning:
         df = self.convert_to_number(self.df)
         df = self.convert_to_datatime(self.df)
         df = self.convert_to_category(self.df)
+        df = self.drop_closed_stores(self.df)
+
         return df
