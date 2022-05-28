@@ -24,10 +24,9 @@ def plot_line(df: pd.DataFrame, x_col: str, y_col: str, title: str, color: str) 
 
 def plot_multi_line(df: pd.DataFrame, x_col: str, y_col: str, y_col2: str, title: str) -> None:
     plt.figure(figsize=(22, 7))
-    fig, ax = plt.subplots()
     plt.title(title, size=20)
-    ax= sns.lineplot(x=x_col, y=y_col, data=df)
-    ax1 = sns.lineplot(x=x_col, y=y_col2, data=df)
+    sns.lineplot(x=x_col, y=y_col, data=df)
+    sns.lineplot(x=x_col, y=y_col2, data=df)
     plt.xticks(rotation=75, fontsize=14)
     plt.yticks(fontsize=14)
     plt.show()

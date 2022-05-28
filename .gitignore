@@ -7,3 +7,8 @@ data/train.csv
 
 data/train_labels.csv
 
+mlruns
+
+notebooks/mlruns
+
+

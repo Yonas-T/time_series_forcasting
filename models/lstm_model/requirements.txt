@@ -1,0 +1,7 @@
+mlflow
+cffi==1.15.0
+fsspec==2022.5.0
+pillow==9.1.1
+pydot==1.4.2
+scikit-learn==1.1.1
+tensorflow-macos==2.9.0
